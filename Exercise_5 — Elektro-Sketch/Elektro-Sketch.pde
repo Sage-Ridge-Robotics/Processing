@@ -1,9 +1,12 @@
 /*
 Sage Ridge Robotics
-Example 5
+Example 5 — Electro-Sketch
 
 Elecktro-sketch, or how to control a brush on the 
 canvas with two potentiometers
+
+Add more potentiometers or other gizmos to your Arduino to 
+control color, line width, etc!
 
 Adapted from Processing.org
 
@@ -23,7 +26,7 @@ esPen myPen;
 Serial myPort;
 color initColor = color(50,50,50); // The RGB pen color
 String inBuffer = null;      
-String portName = "/dev/tty.usbmodemfa141"; 
+String portName = "/dev/tty.usbmodemfa141"; // Set to the correct tty (OSX, Linux) or COM (Windows) port
 int lt = 10;
 
 // Set the canvas size, color mode (hue, saturation, value),
@@ -33,7 +36,7 @@ int lt = 10;
 // a complete line of values from the Arduino the first time.
 void setup() 
 {
-  size(500, 500);
+  size(1618, 1000); // Golden Ratio
   colorMode(HSB, 100);
   noSmooth();
   strokeWeight(3);

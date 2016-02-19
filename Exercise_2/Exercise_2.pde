@@ -32,7 +32,7 @@ int lastBar = -1;
 // a complete line of values from the Arduino the first time.
 void setup() 
 {
-  size(640, 360);
+  size(1000, 700);
   colorMode(HSB, height, height, height);  
   noStroke();
   background(0);

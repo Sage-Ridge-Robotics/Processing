@@ -21,7 +21,7 @@ import processing.serial.*;
 Serial myPort;
 color initColor = color(50,50,50); // The RGB pen color
 String inBuffer = null;      
-String portName = "/dev/tty.usbmodemfa141"; 
+String portName = "/dev/tty.usbmodemfa141"; // Set to the correct COM or tty port
 int lt = 10;
 
 // Set the canvas size, color mode (hue, saturation, value),
@@ -31,7 +31,7 @@ int lt = 10;
 // a complete line of values from the Arduino the first time.
 void setup() 
 {
-  size(640, 360);
+  size(1000, 700);
   colorMode(HSB, height, height, height);  
   noStroke();
   background(0);
