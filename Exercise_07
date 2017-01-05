@@ -1,11 +1,20 @@
 /*
 * Sage Ridge Robotics
-* Example 7
+* Example 7 Digital and analog Input and Output on a Raspberry Pi
 *
 * ElectroSketch using a RaspberryPi, MCP3008 ADC, and two potentiometers. The first potentiometer
 * controls the x position of the stylus, the second the y poisiton. Two classes are declared here, 
 * an extension of the SPI class to provide support for the MCP3008 analog to digital conversion IC, 
 * and a second class to define the stylus.
+* Compare the Example 6 which runs on any Processing supported device and requires an Arduino.
+*
+* Exercises
+* 
+* 1) Change the color scheme of the canvas and stylus to closely match an actual etch-a-sketch.
+* 2) Add analog or digital controls to change the color of the canvas, stylus, or both.
+* 3) Add a digital control to turn off the stylus while it is repositioned.
+* 4) Make the canvas look like an etch-a-sketch restricting the drawing area to a part of the 
+*    total canvas.
 *
 */
 
@@ -21,21 +30,29 @@ color initColor = color(50,50,50);
 // Set things up 
 void setup() {
   fullScreen();
+  frameRate(25);
   colorMode(HSB, 100);
   noSmooth();
   strokeWeight(3);
   background(0,0,100);
   adc0 = new MCP3008(SPI.list()[0]);
-  myPen = new esPen(250,250,initColor);
+  myPen = new esPen(width/2,height/2,initColor);
+  GPIO.pinMode(21, GPIO.INPUT);
 }
 
 // and Run
 void draw() {
+      if (GPIO.digitalRead(21) == GPIO.HIGH) {
+        background(0,0,100);
+        myPen.xPrev = myPen.x;
+        myPen.yPrev = myPen.y;
+    } else {
       myPen.xPrev = myPen.x;
       myPen.yPrev = myPen.y;
       myPen.x = map(adc0.getAnalog(0), 0, 1023, 0, width);
       myPen.y = map(adc0.getAnalog(0), 0, 1023, 0, height);
       myPen.ink();
+    }
 }
 
 // Declare MCP3008 class
