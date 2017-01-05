@@ -1,0 +1,95 @@
+/*
+ * 
+ * ElectroSketch using a RaspberryPi, MCP3008 ADC, and two potentiometers
+ *
+*/
+
+// Import libraries
+import processing.io.*;
+
+// Declare variables and objects
+// We define two classes below
+MCP3008 adc0;
+esPen myPen;
+color initColor = color(50,50,50);
+
+// Set things up 
+void setup() {
+  fullScreen();
+  colorMode(HSB, 100);
+  noSmooth();
+  strokeWeight(3);
+  background(0,0,100);
+  adc0 = new MCP3008(SPI.list()[0]);
+  myPen = new esPen(250,250,initColor);
+}
+
+// and Run
+void draw() {
+      myPen.xPrev = myPen.x;
+      myPen.yPrev = myPen.y;
+      myPen.x = map(adc0.getAnalog(0), 0, 1023, 0, width);
+      myPen.y = map(adc0.getAnalog(0), 0, 1023, 0, height);
+      myPen.ink();
+}
+
+// Declare MCP3008 class
+// After GrumpyMike (2016) Processing Forum
+class MCP3008 extends SPI {
+
+  // Class constructor
+  MCP3008(String dev) {
+    super(dev);
+    super.settings(1000000, SPI.MSBFIRST, SPI.MODE0);
+  }
+ 
+  // Declare method
+  int getAnalog(int channel) {
+    
+    if (channel < 0 || channel > 7) {
+      System.err.println("The channel needs to be from 0 to 7");
+      throw new IllegalArgumentException("Unexpected channel");
+    }
+    
+    byte[] out = { 0, 0, 0 };
+    out[0] = (byte)(0x18 | channel);
+    byte[] in = super.transfer(out);
+    int val = ((in[1] & 0x3f)<< 4 ) | ((in[2] & 0xf0) >> 4);
+    return int(val/1023);
+  }
+  
+}
+
+// Declare the esPen class
+class esPen {
+ 
+ // Class variables 
+ int x;
+ int y;
+ int xPrev;
+ int yPrev;
+ int hueValue;
+ int satValue;
+ int brightnessValue;
+ color esHSB; 
+
+ // Class constructor
+ esPen (int xpos, int ypos, int hV) {
+ x = xpos;
+ y = ypos;
+ xPrev = xpos;
+ yPrev = ypos;
+ hueValue = hV; 
+ satValue = 50; 
+ brightnessValue = 50; 
+ esHSB = color(hueValue,satValue,brightnessValue);
+
+ }
+
+ // Class Methods
+ void ink() {
+   esHSB = color(hueValue,50,50);   
+   stroke( esHSB );
+   line(x, y, xPrev, yPrev);
+ }
+}
