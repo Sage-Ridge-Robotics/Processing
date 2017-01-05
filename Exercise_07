@@ -1,7 +1,12 @@
 /*
- * 
- * ElectroSketch using a RaspberryPi, MCP3008 ADC, and two potentiometers
- *
+* Sage Ridge Robotics
+* Example 7
+*
+* ElectroSketch using a RaspberryPi, MCP3008 ADC, and two potentiometers. The first potentiometer
+* controls the x position of the stylus, the second the y poisiton. Two classes are declared here, 
+* an extension of the SPI class to provide support for the MCP3008 analog to digital conversion IC, 
+* and a second class to define the stylus.
+*
 */
 
 // Import libraries
